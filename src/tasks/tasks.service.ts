@@ -4,8 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Daily } from '../entities/daily.entity';
 import { Repository } from 'typeorm';
 import { DailyStat } from '../types/daily-stats';
-import { AbandonedStat } from '../types/abandoned';
-import { Abandoned } from '../entities/abandoned.entity';
+import { EventStat } from '../types/event';
+import { Event } from '../entities/event.entity';
 
 const csv = require('csvtojson');
 
@@ -13,8 +13,8 @@ const csv = require('csvtojson');
 export class TasksService {
   constructor(
     @InjectRepository(Daily) private dailyRepository: Repository<Daily>,
-    @InjectRepository(Abandoned)
-    private abandonedRepository: Repository<Abandoned>,
+    @InjectRepository(Event)
+    private eventRepository: Repository<Event>,
   ) {}
 
   async importDailyStats() {
@@ -35,29 +35,28 @@ export class TasksService {
       await this.dailyRepository.delete(dailyEntries.map((item) => item.id));
     }
 
-    await this.dailyRepository.save(mappedDailyStats);
+    await this.dailyRepository.save(mappedDailyStats, { chunk: 100 });
   }
 
-  async importAbandoned() {
-    const abandonedStats: AbandonedStat[] = await this.fetchStats(
-      DataUrl.Abandoned,
+  async importTotalsBySystem() {
+    const eventStats: EventStat[] = await this.fetchStats(
+      DataUrl.TotalsBySystem,
     );
-    const abandonedItems = abandonedStats.map((item) => ({
+    const eventItems = eventStats.map((item) => ({
       country: item.country,
       origin: item.origin,
       system: item.system,
+      status: item.status,
       url: item.url,
       date: item.date_recorded,
-    })) as Abandoned[];
+    })) as Event[];
 
-    const abandonedEntries = await this.abandonedRepository.find();
-    if (abandonedEntries.length > 0) {
-      await this.abandonedRepository.delete(
-        abandonedEntries.map((item) => item.id),
-      );
+    const eventEntries = await this.eventRepository.find();
+    if (eventEntries.length > 0) {
+      await this.eventRepository.delete(eventEntries.map((item) => item.id));
     }
 
-    await this.abandonedRepository.save(abandonedItems);
+    await this.eventRepository.save(eventItems, { chunk: 100 });
   }
 
   private async fetchStats(url: DataUrl) {

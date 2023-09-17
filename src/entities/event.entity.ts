@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Abandoned {
+export class Event {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -13,6 +13,9 @@ export class Abandoned {
 
   @Column()
   system: string;
+
+  @Column()
+  status: string;
 
   @Column()
   url: string;

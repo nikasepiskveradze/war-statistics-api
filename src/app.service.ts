@@ -7,6 +7,6 @@ export class AppService {
 
   async onApplicationBootstrap() {
     // await this.tasksService.importDailyStats();
-    await this.tasksService.importAbandoned();
+    // await this.tasksService.importTotalsBySystem();
   }
 }

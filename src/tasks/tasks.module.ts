@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TasksService } from './tasks.service';
-import { TasksController } from './tasks.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Daily } from '../entities/daily.entity';
+import { Abandoned } from '../entities/abandoned.entity';
 
 @Module({
-  controllers: [TasksController],
+  imports: [TypeOrmModule.forFeature([Daily, Abandoned])],
   providers: [TasksService],
   exports: [TasksService],
 })

@@ -5,8 +5,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EquipmentsModule } from './equipments/equipments.module';
-import { SystemsModule } from './systems/systems.module';
+import { EquipmentsModule } from './modules/equipments/equipments.module';
+import { SystemsModule } from './modules/systems/systems.module';
 import typeorm from './config/typeorm';
 
 @Module({

@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { System } from './system.entity';
 import { Repository } from 'typeorm';
 import { AllSystem } from './all-system.entity';
-import { DataUrl } from '../enums/data-url.enum';
+import { DataUrl } from '../../enums/data-url.enum';
 import { ISystem } from './interfaces/system.interface';
 import { serializeSystems } from './serializers/system.serialize';
 import { IAllSystem } from './interfaces/all-system.interface';
 import { serializeAllSystems } from './serializers/all-system.serialize';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 const csv = require('csvtojson');
 
@@ -19,6 +20,7 @@ export class SystemsService {
     private allSystemRepository: Repository<AllSystem>,
   ) {}
 
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importSystems() {
     const systems = await this.fetchStats<ISystem[]>(DataUrl.Systems);
     const serializedSystems = systems.map(serializeSystems);
@@ -31,6 +33,7 @@ export class SystemsService {
     await this.systemRepository.save(serializedSystems, { chunk: 100 });
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importAllSystems() {
     const allSystems = await this.fetchStats<IAllSystem[]>(DataUrl.AllSystems);
     const serializedAllSystems = allSystems.map(serializeAllSystems);

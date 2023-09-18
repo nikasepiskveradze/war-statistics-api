@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { EquipmentsService } from './equipments/equipments.service';
-import { SystemsService } from './systems/systems.service';
+import { EquipmentsService } from './modules/equipments/equipments.service';
+import { SystemsService } from './modules/systems/systems.service';
 
 @Injectable()
 export class AppService {
@@ -9,5 +9,10 @@ export class AppService {
     private systemsService: SystemsService,
   ) {}
 
-  async onApplicationBootstrap() {}
+  async onApplicationBootstrap() {
+    await this.equipmentsService.importEquipments();
+    await this.equipmentsService.importAllEquipments();
+    await this.systemsService.importSystems();
+    await this.systemsService.importAllSystems();
+  }
 }

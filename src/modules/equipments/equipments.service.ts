@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Equipment } from './equipment.entity';
 import { Repository } from 'typeorm';
 import { AllEquipment } from './all-equipment.entity';
-import { DataUrl } from '../enums/data-url.enum';
+import { DataUrl } from '../../enums/data-url.enum';
 import { IEquipment } from './interfaces/equipment.interface';
 import { serializeEquipments } from './serializers/equipment.serialize';
 import { IAllEquipment } from './interfaces/all-equipment.interface';
 import { serializeAllEquipments } from './serializers/all-equipment.serialize';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 const csv = require('csvtojson');
 
@@ -20,6 +21,7 @@ export class EquipmentsService {
     private allEquipmentRepository: Repository<AllEquipment>,
   ) {}
 
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importEquipments() {
     const equipments = await this.fetchStats<IEquipment[]>(DataUrl.Equipments);
     const serializedEquipments = equipments.map(serializeEquipments);
@@ -32,6 +34,7 @@ export class EquipmentsService {
     await this.equipmentRepository.save(serializedEquipments, { chunk: 100 });
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importAllEquipments() {
     const allEquipments = await this.fetchStats<IAllEquipment[]>(
       DataUrl.AllEquipments,

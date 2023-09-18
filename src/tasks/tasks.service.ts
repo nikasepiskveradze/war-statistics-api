@@ -8,6 +8,9 @@ import { EventStat } from '../types/event';
 import { Event } from '../entities/event.entity';
 import { SystemWideStat } from '../types/system-wide';
 import { SystemWide } from '../entities/system-wide.entity';
+import { TypeStat } from '../types/type-stat';
+import { TotalsType } from '../entities/totals-type.entity';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 const csv = require('csvtojson');
 
@@ -19,8 +22,11 @@ export class TasksService {
     private eventRepository: Repository<Event>,
     @InjectRepository(SystemWide)
     private systemWideRepository: Repository<SystemWide>,
+    @InjectRepository(TotalsType)
+    private totalsTypeRepository: Repository<TotalsType>,
   ) {}
 
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importDailyStats() {
     const dailyStats: DailyStat[] = await this.fetchStats(DataUrl.DailyStats);
     const mappedDailyStats = dailyStats.map((item) => ({
@@ -42,6 +48,7 @@ export class TasksService {
     await this.dailyRepository.save(mappedDailyStats, { chunk: 100 });
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importTotalsBySystem() {
     const eventStats: EventStat[] = await this.fetchStats(
       DataUrl.TotalsBySystem,
@@ -63,6 +70,7 @@ export class TasksService {
     await this.eventRepository.save(eventItems, { chunk: 100 });
   }
 
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importTotalBySystemWide() {
     const systemWideStats: SystemWideStat[] = await this.fetchStats(
       DataUrl.TotalsBySystemWide,
@@ -85,6 +93,30 @@ export class TasksService {
     }
 
     await this.systemWideRepository.save(systemWideItems, { chunk: 100 });
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_1PM)
+  async importTotalsByType() {
+    const typeStats: TypeStat[] = await this.fetchStats(DataUrl.TotalByType);
+
+    const typeItems = typeStats.map((item) => ({
+      country: item.country,
+      type: item.equipment_type,
+      destroyed: parseInt(item.destroyed),
+      abandoned: parseInt(item.abandoned),
+      captured: parseInt(item.captured),
+      damaged: parseInt(item.damaged),
+      total: parseInt(item.type_total),
+    })) as TotalsType[];
+
+    const typeEntries = await this.totalsTypeRepository.find();
+    if (typeEntries.length > 0) {
+      await this.totalsTypeRepository.delete(
+        typeEntries.map((item) => item.id),
+      );
+    }
+
+    await this.totalsTypeRepository.save(typeItems, { chunk: 100 });
   }
 
   private async fetchStats(url: DataUrl) {

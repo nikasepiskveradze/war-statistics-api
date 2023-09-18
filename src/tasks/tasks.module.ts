@@ -4,9 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Daily } from '../entities/daily.entity';
 import { Event } from '../entities/event.entity';
 import { SystemWide } from '../entities/system-wide.entity';
+import { TotalsType } from '../entities/totals-type.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Daily, Event, SystemWide])],
+  imports: [TypeOrmModule.forFeature([Daily, Event, SystemWide, TotalsType])],
   providers: [TasksService],
   exports: [TasksService],
 })

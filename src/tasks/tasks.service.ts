@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { DailyStat } from '../types/daily-stats';
 import { EventStat } from '../types/event';
 import { Event } from '../entities/event.entity';
+import { SystemWideStat } from '../types/system-wide';
+import { SystemWide } from '../entities/system-wide.entity';
 
 const csv = require('csvtojson');
 
@@ -15,6 +17,8 @@ export class TasksService {
     @InjectRepository(Daily) private dailyRepository: Repository<Daily>,
     @InjectRepository(Event)
     private eventRepository: Repository<Event>,
+    @InjectRepository(SystemWide)
+    private systemWideRepository: Repository<SystemWide>,
   ) {}
 
   async importDailyStats() {
@@ -57,6 +61,30 @@ export class TasksService {
     }
 
     await this.eventRepository.save(eventItems, { chunk: 100 });
+  }
+
+  async importTotalBySystemWide() {
+    const systemWideStats: SystemWideStat[] = await this.fetchStats(
+      DataUrl.TotalsBySystemWide,
+    );
+
+    const systemWideItems = systemWideStats.map((item) => ({
+      ...item,
+      destroyed: parseInt(item.destroyed),
+      captured: parseInt(item.captured),
+      abandoned: parseInt(item.abandoned),
+      damaged: parseInt(item.damaged),
+      total: parseInt(item.total),
+    })) as SystemWide[];
+
+    const systemEntries = await this.systemWideRepository.find();
+    if (systemEntries.length > 0) {
+      await this.systemWideRepository.delete(
+        systemEntries.map((item) => item.id),
+      );
+    }
+
+    await this.systemWideRepository.save(systemWideItems, { chunk: 100 });
   }
 
   private async fetchStats(url: DataUrl) {

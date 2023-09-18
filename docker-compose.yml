@@ -12,5 +12,17 @@ services:
       - wdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    command: npm run startup
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+    env_file:
+      - ./.env
+
 volumes:
   wdata:

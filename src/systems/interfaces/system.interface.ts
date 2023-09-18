@@ -1,4 +1,4 @@
-export interface EventStat {
+export interface ISystem {
   country: string;
   origin: string;
   system: string;

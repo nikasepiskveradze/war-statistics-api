@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { TasksService } from './tasks/tasks.service';
+import { EquipmentsService } from './equipments/equipments.service';
+import { SystemsService } from './systems/systems.service';
 
 @Injectable()
 export class AppService {
-  constructor(private tasksService: TasksService) {}
+  constructor(
+    private equipmentsService: EquipmentsService,
+    private systemsService: SystemsService,
+  ) {}
 
-  async onApplicationBootstrap() {
-    await this.tasksService.importDailyStats();
-    await this.tasksService.importTotalsBySystem();
-    await this.tasksService.importTotalBySystemWide();
-    await this.tasksService.importTotalsByType();
-  }
+  async onApplicationBootstrap() {}
 }

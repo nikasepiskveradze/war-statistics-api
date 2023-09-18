@@ -1,10 +1,9 @@
-export interface DailyStat {
+export interface IAllSystem {
   country: string;
-  equipment_type: string;
+  system: string;
   destroyed: string;
   abandoned: string;
   captured: string;
   damaged: string;
-  type_total: string;
-  date_recorded: string;
+  total: string;
 }

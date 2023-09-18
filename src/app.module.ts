@@ -1,11 +1,12 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TasksModule } from './tasks/tasks.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EquipmentsModule } from './equipments/equipments.module';
+import { SystemsModule } from './systems/systems.module';
 import typeorm from './config/typeorm';
 
 @Module({
@@ -20,7 +21,8 @@ import typeorm from './config/typeorm';
         configService.get('typeorm'),
     }),
     ScheduleModule.forRoot(),
-    TasksModule,
+    EquipmentsModule,
+    SystemsModule,
   ],
   controllers: [AppController],
   providers: [

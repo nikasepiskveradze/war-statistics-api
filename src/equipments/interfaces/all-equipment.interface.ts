@@ -1,9 +1,9 @@
-export interface SystemWideStat {
+export interface IAllEquipment {
   country: string;
-  system: string;
+  equipment_type: string;
   destroyed: string;
   abandoned: string;
   captured: string;
   damaged: string;
-  total: string;
+  type_total: string;
 }

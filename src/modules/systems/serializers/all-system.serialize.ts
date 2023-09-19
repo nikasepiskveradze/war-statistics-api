@@ -1,5 +1,5 @@
 import { IAllSystem } from '../interfaces/all-system.interface';
-import { AllSystem } from '../all-system.entity';
+import { AllSystem } from '../entities/all-system.entity';
 
 export const serializeAllSystems = (item: IAllSystem): Partial<AllSystem> => {
   return {

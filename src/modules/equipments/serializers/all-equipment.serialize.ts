@@ -1,5 +1,5 @@
 import { IAllEquipment } from '../interfaces/all-equipment.interface';
-import { AllEquipment } from '../all-equipment.entity';
+import { AllEquipment } from '../entities/all-equipment.entity';
 
 export const serializeAllEquipments = (
   item: IAllEquipment,

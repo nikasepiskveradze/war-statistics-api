@@ -1,5 +1,5 @@
 import { ISystem } from '../interfaces/system.interface';
-import { System } from '../system.entity';
+import { System } from '../entities/system.entity';
 
 export const serializeSystems = (item: ISystem): Partial<System> => {
   return {

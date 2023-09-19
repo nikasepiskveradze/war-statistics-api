@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { System } from './system.entity';
+import { System } from './entities/system.entity';
 import { Repository } from 'typeorm';
-import { AllSystem } from './all-system.entity';
+import { AllSystem } from './entities/all-system.entity';
 import { DataUrl } from '../../enums/data-url.enum';
 import { ISystem } from './interfaces/system.interface';
 import { serializeSystems } from './serializers/system.serialize';

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Equipment } from '../modules/equipments/equipment.entity';
-import { AllEquipment } from '../modules/equipments/all-equipment.entity';
+import { Equipment } from '../modules/equipments/entities/equipment.entity';
+import { AllEquipment } from '../modules/equipments/entities/all-equipment.entity';
 import { Repository } from 'typeorm';
 import { DataUrl } from '../enums/data-url.enum';
-import { System } from '../modules/systems/system.entity';
-import { AllSystem } from '../modules/systems/all-system.entity';
+import { System } from '../modules/systems/entities/system.entity';
+import { AllSystem } from '../modules/systems/entities/all-system.entity';
 const csv = require('csvtojson');
 
 @Injectable()

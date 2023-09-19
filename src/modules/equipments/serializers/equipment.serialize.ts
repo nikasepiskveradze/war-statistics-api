@@ -1,5 +1,5 @@
 import { IEquipment } from '../interfaces/equipment.interface';
-import { Equipment } from '../equipment.entity';
+import { Equipment } from '../entities/equipment.entity';
 
 export const serializeEquipments = (item: IEquipment): Partial<Equipment> => {
   return {

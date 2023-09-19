@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Equipment } from './equipment.entity';
+import { Equipment } from './entities/equipment.entity';
 import { Repository } from 'typeorm';
-import { AllEquipment } from './all-equipment.entity';
+import { AllEquipment } from './entities/all-equipment.entity';
 import { DataUrl } from '../../enums/data-url.enum';
 import { IEquipment } from './interfaces/equipment.interface';
 import { serializeEquipments } from './serializers/equipment.serialize';
@@ -10,6 +10,9 @@ import { IAllEquipment } from './interfaces/all-equipment.interface';
 import { serializeAllEquipments } from './serializers/all-equipment.serialize';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { ImportService } from '../../services/import.service';
+import { TotalEquipmentsDto } from './dto/total-equipments.dto';
+import { Countries } from '../../enums/countries.enum';
+import { EquipmentsDto } from './dto/equipments.dto';
 
 @Injectable()
 export class EquipmentsService {
@@ -20,6 +23,61 @@ export class EquipmentsService {
     private allEquipmentRepository: Repository<AllEquipment>,
     private importService: ImportService,
   ) {}
+
+  equipments(country: Countries, { type, date }: EquipmentsDto) {
+    if (![Countries.Ukraine, Countries.Russia].includes(country)) {
+      throw new BadRequestException(
+        'Please provide ukraine or russia in parameter',
+      );
+    }
+
+    const query = this.equipmentRepository
+      .createQueryBuilder()
+      .select()
+      .where('LOWER(country) = LOWER(:country)', { country });
+
+    if (type) {
+      query.andWhere('type IN (:...type)', { type });
+    }
+
+    if (date && date[0] > date[1]) {
+      throw new BadRequestException(
+        'Start date should be before than End date, please correct',
+      );
+    }
+
+    if (date) {
+      query
+        .andWhere('date >= :startDate', { startDate: date[0] })
+        .andWhere('date <= :endDate', { endDate: date[1] });
+    }
+
+    return query.getMany();
+  }
+
+  totalEquipments({ country, type }: TotalEquipmentsDto) {
+    const query = this.allEquipmentRepository.createQueryBuilder().select();
+
+    if (country) {
+      query.andWhere('LOWER(country) = LOWER(:country)', { country });
+    }
+    if (type) {
+      query.andWhere('type IN (:...type)', { type });
+    }
+
+    return query.orderBy('country', 'ASC').addOrderBy('type').getMany();
+  }
+
+  equipmentTypes() {
+    return this.allEquipmentRepository
+      .createQueryBuilder('equipment')
+      .select(['equipment.type'])
+      .andWhere('LOWER(country) = LOWER(:country)', {
+        country: Countries.Ukraine,
+      })
+      .orderBy('type', 'ASC')
+      .getMany();
+  }
 
   @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importEquipments() {

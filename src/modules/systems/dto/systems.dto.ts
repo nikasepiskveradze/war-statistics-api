@@ -4,16 +4,21 @@ import {
   IsArray,
   IsOptional,
 } from 'class-validator';
-import { EquipmentType } from '../../../enums/equipment-type.enum';
+import { Status } from '../../../enums/status.enum';
 
-export class EquipmentsDto {
+export class SystemsDto {
   @IsArray()
   @IsOptional()
-  types: EquipmentType[];
+  systems: string[];
 
   @IsArray()
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
   @IsOptional()
   date: string[];
+
+  @IsArray()
+  @ArrayMaxSize(4)
+  @IsOptional()
+  status: Status[];
 }

@@ -24,8 +24,8 @@ export class EquipmentsService {
     private importService: ImportService,
   ) {}
 
-  equipments(country: Countries, { type, date }: EquipmentsDto) {
-    if (![Countries.Ukraine, Countries.Russia].includes(country)) {
+  equipments(country: Countries, { types, date }: EquipmentsDto) {
+    if (!!Object.values(Countries).includes(country)) {
       throw new BadRequestException(
         'Please provide ukraine or russia in parameter',
       );
@@ -36,8 +36,8 @@ export class EquipmentsService {
       .select()
       .where('LOWER(country) = LOWER(:country)', { country });
 
-    if (type) {
-      query.andWhere('type IN (:...type)', { type });
+    if (types) {
+      query.andWhere('type IN (:...types)', { types });
     }
 
     if (date && date[0] > date[1]) {
@@ -55,14 +55,14 @@ export class EquipmentsService {
     return query.getMany();
   }
 
-  totalEquipments({ country, type }: TotalEquipmentsDto) {
+  totalEquipments({ country, types }: TotalEquipmentsDto) {
     const query = this.allEquipmentRepository.createQueryBuilder().select();
 
     if (country) {
       query.andWhere('LOWER(country) = LOWER(:country)', { country });
     }
-    if (type) {
-      query.andWhere('type IN (:...type)', { type });
+    if (types) {
+      query.andWhere('type IN (:...types)', { types });
     }
 
     return query.orderBy('country', 'ASC').addOrderBy('type').getMany();

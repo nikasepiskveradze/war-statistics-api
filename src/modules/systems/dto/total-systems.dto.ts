@@ -1,13 +1,12 @@
 import { IsArray, IsOptional, IsString } from 'class-validator';
 import { Countries } from '../../../enums/countries.enum';
-import { EquipmentType } from '../../../enums/equipment-type.enum';
 
-export class TotalEquipmentsDto {
+export class TotalSystemsDto {
   @IsString()
   @IsOptional()
   country: Countries;
 
   @IsArray()
   @IsOptional()
-  types: EquipmentType[];
+  systems: string[];
 }

@@ -9,8 +9,7 @@ import { serializeSystems } from './serializers/system.serialize';
 import { IAllSystem } from './interfaces/all-system.interface';
 import { serializeAllSystems } from './serializers/all-system.serialize';
 import { Cron, CronExpression } from '@nestjs/schedule';
-
-const csv = require('csvtojson');
+import { ImportService } from '../../services/import.service';
 
 @Injectable()
 export class SystemsService {
@@ -18,38 +17,29 @@ export class SystemsService {
     @InjectRepository(System) private systemRepository: Repository<System>,
     @InjectRepository(AllSystem)
     private allSystemRepository: Repository<AllSystem>,
+    private importService: ImportService,
   ) {}
 
   @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importSystems() {
-    const systems = await this.fetchStats<ISystem[]>(DataUrl.Systems);
+    const systems = await this.importService.fetchStats<ISystem[]>(
+      DataUrl.Systems,
+    );
     const serializedSystems = systems.map(serializeSystems);
 
-    const entries = await this.systemRepository.find();
-    if (entries.length > 0) {
-      await this.systemRepository.delete(entries.map((entry) => entry.id));
-    }
-
-    await this.systemRepository.save(serializedSystems, { chunk: 100 });
+    await this.importService.import(serializedSystems, this.systemRepository);
   }
 
   @Cron(CronExpression.EVERY_DAY_AT_1PM)
   async importAllSystems() {
-    const allSystems = await this.fetchStats<IAllSystem[]>(DataUrl.AllSystems);
+    const allSystems = await this.importService.fetchStats<IAllSystem[]>(
+      DataUrl.AllSystems,
+    );
     const serializedAllSystems = allSystems.map(serializeAllSystems);
 
-    const entries = await this.allSystemRepository.find();
-    if (entries.length > 0) {
-      await this.allSystemRepository.delete(entries.map((entry) => entry.id));
-    }
-
-    await this.allSystemRepository.save(serializedAllSystems, { chunk: 100 });
-  }
-
-  private async fetchStats<T>(url: DataUrl) {
-    const response = await fetch(url);
-    const data = await response.text();
-
-    return csv().fromString(data) as T;
+    await this.importService.import(
+      serializedAllSystems,
+      this.allSystemRepository,
+    );
   }
 }

@@ -14,4 +14,4 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 COPY --from=build_stage /app/dist ./dist/
 EXPOSE 80
-ENTRYPOINT ["node", "dist/main.js"]
+CMD ["node", "dist/main.js"]

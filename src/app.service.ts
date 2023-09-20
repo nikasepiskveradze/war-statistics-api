@@ -10,9 +10,9 @@ export class AppService {
   ) {}
 
   async onApplicationBootstrap() {
-    // await this.equipmentsService.importEquipments();
-    // await this.equipmentsService.importAllEquipments();
-    // await this.systemsService.importSystems();
-    // await this.systemsService.importAllSystems();
+    await this.equipmentsService.importEquipments();
+    await this.equipmentsService.importAllEquipments();
+    await this.systemsService.importSystems();
+    await this.systemsService.importAllSystems();
   }
 }

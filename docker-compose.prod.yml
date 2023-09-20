@@ -19,6 +19,7 @@ services:
       context: .
       dockerfile: Dockerfile.prod
     restart: unless-stopped
+    command: npm run start:prod
     ports:
       - 80:80
     depends_on:

@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15.4
+    restart: always
+    env_file:
+      - .env.production
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - wdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: unless-stopped
+    ports:
+      - 80:80
+    depends_on:
+      - db
+    env_file:
+      - ./.env.production
+
+volumes:
+  wdata:

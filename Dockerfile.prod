@@ -1,0 +1,17 @@
+# Building stage
+FROM node:current-alpine3.18 as build_stage
+WORKDIR /app
+COPY tsconfig*.json ./
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Deploying stage
+FROM node:current-alpine3.18 as deploying_stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --omit=dev
+COPY --from=build_stage /app/dist ./dist/
+EXPOSE 80
+ENTRYPOINT ["node", "dist/main.js"]

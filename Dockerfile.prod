@@ -1,5 +1,5 @@
 # Building stage
-FROM node:current-alpine3.18 as build_stage
+FROM node:18-alpine as build_stage
 WORKDIR /app
 COPY tsconfig*.json ./
 COPY package*.json ./
@@ -8,7 +8,7 @@ COPY . .
 RUN npm run build
 
 # Deploying stage
-FROM node:current-alpine3.18 as deploying_stage
+FROM node:18-alpine as deploying_stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci --omit=dev

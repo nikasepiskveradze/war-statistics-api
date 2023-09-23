@@ -3,12 +3,14 @@ import { EquipmentsService } from './equipments.service';
 import { TotalEquipmentsDto } from './dto/total-equipments.dto';
 import { Countries } from '../../enums/countries.enum';
 import { EquipmentsDto } from './dto/equipments.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller()
+@ApiTags('Equipments')
+@Controller('/api/stats')
 export class EquipmentsController {
   constructor(private readonly equipmentsService: EquipmentsService) {}
 
-  @Get('/stats/equipments/:country')
+  @Get('/equipments/:country')
   getEquipments(
     @Param('country') country: Countries,
     @Body() body: EquipmentsDto,
@@ -16,12 +18,12 @@ export class EquipmentsController {
     return this.equipmentsService.equipments(country, body);
   }
 
-  @Get('/stats/equipments')
+  @Get('/equipments')
   getTotalEquipments(@Body() body: TotalEquipmentsDto) {
     return this.equipmentsService.totalEquipments(body);
   }
 
-  @Get('/stats/equipment-types')
+  @Get('/equipment-types')
   getEquipmentTypes() {
     return this.equipmentsService.equipmentTypes();
   }

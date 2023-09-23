@@ -11,9 +11,9 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_DB=${POSTGRES_DB}
     volumes:
-      - wdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5435:5435
   app:
     build:
       context: .
@@ -26,6 +26,5 @@ services:
       - db
     env_file:
       - ./.env.production
-
 volumes:
-  wdata:
+  pgdata:

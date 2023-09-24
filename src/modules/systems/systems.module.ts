@@ -4,7 +4,7 @@ import { SystemsController } from './systems.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { System } from './entities/system.entity';
 import { AllSystem } from './entities/all-system.entity';
-import { ImportService } from '../../services/import.service';
+import { ImportService } from '../../utils/import.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([System, AllSystem])],

@@ -9,7 +9,7 @@ import { serializeSystems } from './serializers/system.serialize';
 import { IAllSystem } from './interfaces/all-system.interface';
 import { serializeAllSystems } from './serializers/all-system.serialize';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ImportService } from '../../services/import.service';
+import { ImportService } from '../../utils/import.service';
 import { TotalSystemsDto } from './dto/total-systems.dto';
 import { Countries } from '../../enums/countries.enum';
 import { SystemsDto } from './dto/systems.dto';

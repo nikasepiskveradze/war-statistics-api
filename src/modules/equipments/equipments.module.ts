@@ -4,7 +4,7 @@ import { EquipmentsController } from './equipments.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Equipment } from './entities/equipment.entity';
 import { AllEquipment } from './entities/all-equipment.entity';
-import { ImportService } from '../../services/import.service';
+import { ImportService } from '../../utils/import.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Equipment, AllEquipment])],

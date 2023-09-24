@@ -9,7 +9,7 @@ import { serializeEquipments } from './serializers/equipment.serialize';
 import { IAllEquipment } from './interfaces/all-equipment.interface';
 import { serializeAllEquipments } from './serializers/all-equipment.serialize';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { ImportService } from '../../services/import.service';
+import { ImportService } from '../../utils/import.service';
 import { TotalEquipmentsDto } from './dto/total-equipments.dto';
 import { Countries } from '../../enums/countries.enum';
 import { EquipmentsDto } from './dto/equipments.dto';

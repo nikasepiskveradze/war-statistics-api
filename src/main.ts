@@ -2,9 +2,21 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as process from 'process';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as fs from 'fs';
+
+const httpsOptions = {
+  key: fs.readFileSync(
+    '/etc/letsencrypt/live/war-track.com/privkey.pem',
+    'utf8',
+  ),
+  cert: fs.readFileSync(
+    '/etc/letsencrypt/live/war-track.com/fullchain.pem',
+    'utf8',
+  ),
+};
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { httpsOptions });
 
   const config = new DocumentBuilder()
     .setTitle('War Track API')

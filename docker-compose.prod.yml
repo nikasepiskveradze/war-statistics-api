@@ -20,6 +20,9 @@ services:
       dockerfile: Dockerfile.prod
     restart: unless-stopped
     command: npm run start:prod
+    volumes:
+      - /etc/letsencrypt/live/war-track.com/privkey.pem:/etc/letsencrypt/live/war-track.com/privkey.pem
+      - /etc/letsencrypt/live/war-track.com/fullchain.pem:/etc/letsencrypt/live/war-track.com/fullchain.pem
     ports:
       - 443:443
     depends_on:

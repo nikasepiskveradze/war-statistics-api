@@ -13,6 +13,13 @@ async function bootstrap() {
   const server = express();
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
+  const config = new DocumentBuilder()
+    .setTitle('War Track API')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   if (process.env.NODE_ENV === 'production') {
     await app.init();
     const httpServer = http
@@ -28,12 +35,5 @@ async function bootstrap() {
   } else {
     await app.listen(process.env.APP_HTTP_PORT);
   }
-
-  const config = new DocumentBuilder()
-    .setTitle('War Track API')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
 }
 bootstrap();

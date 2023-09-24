@@ -25,6 +25,7 @@ services:
       - /etc/letsencrypt/live/war-track.com/fullchain.pem:/etc/letsencrypt/live/war-track.com/fullchain.pem
     ports:
       - 443:443
+      - 80:80
     depends_on:
       - db
     env_file:

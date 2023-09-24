@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  ValidationPipe,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -36,7 +41,7 @@ import { HttpsRedirectMiddleware } from './utils/http-redirect.middleware';
     ShutdownObserver,
   ],
 })
-export class AppModule {
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(HttpsRedirectMiddleware).forRoutes('*');
   }

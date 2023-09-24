@@ -11,7 +11,8 @@ RUN npm run build
 FROM node:18-alpine as deploying_stage
 WORKDIR /app
 COPY package*.json ./
+COPY /etc/letsencrypt/live/war-track.com ./certificates/
 RUN npm ci --omit=dev
 COPY --from=build_stage /app/dist ./dist/
-EXPOSE 80
+EXPOSE 443
 CMD ["node", "dist/main.js"]

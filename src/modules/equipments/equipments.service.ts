@@ -25,7 +25,7 @@ export class EquipmentsService {
   ) {}
 
   equipments(country: Countries, { types, date }: EquipmentsDto) {
-    if (!!Object.values(Countries).includes(country)) {
+    if (!Object.values(Countries).includes(country)) {
       throw new BadRequestException(
         'Please provide ukraine or russia in parameter',
       );

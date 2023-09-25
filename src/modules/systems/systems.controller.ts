@@ -3,13 +3,14 @@ import { SystemsService } from './systems.service';
 import { TotalSystemsDto } from './dto/total-systems.dto';
 import { Countries } from '../../enums/countries.enum';
 import { SystemsDto } from './dto/systems.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Systems')
 @Controller('/api/stats')
 export class SystemsController {
   constructor(private readonly systemsService: SystemsService) {}
 
+  @ApiParam({ name: 'country', enum: Countries })
   @Get('/systems/:country')
   getSystems(@Param('country') country: Countries, @Body() body: SystemsDto) {
     return this.systemsService.systems(country, body);

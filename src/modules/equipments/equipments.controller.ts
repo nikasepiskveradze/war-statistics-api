@@ -3,13 +3,14 @@ import { EquipmentsService } from './equipments.service';
 import { TotalEquipmentsDto } from './dto/total-equipments.dto';
 import { Countries } from '../../enums/countries.enum';
 import { EquipmentsDto } from './dto/equipments.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Equipments')
 @Controller('/api/stats')
 export class EquipmentsController {
   constructor(private readonly equipmentsService: EquipmentsService) {}
 
+  @ApiParam({ name: 'country', enum: Countries })
   @Get('/equipments/:country')
   getEquipments(
     @Param('country') country: Countries,

@@ -16,7 +16,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('War Track API')
     .setDescription(
-      'NOTE: Some endpoints does not work in Swagger, due to Swagger limitation, but they are working properly if you pass correct values from your application  ',
+      'NOTE: Some endpoints does not work in Swagger, due to Swagger limitation. But they are working properly if you pass correct values from your application  ',
     )
     .setVersion('1.0')
     .build();

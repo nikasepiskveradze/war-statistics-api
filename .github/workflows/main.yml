@@ -16,7 +16,7 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
 
         script: |
-          cd /home/war-statistics-api/ && git pull origin main
+          cd /home/war-track-api/ && git pull origin main
           docker-compose -f docker-compose.prod.yml --env-file .env.production down
           docker-compose -f docker-compose.prod.yml --env-file .env.production build
           docker image prune -f

@@ -27,14 +27,15 @@ export class EquipmentsService {
   equipments(country: Countries, { types, date }: EquipmentsDto) {
     if (!Object.values(Countries).includes(country)) {
       throw new BadRequestException(
-        'Please provide ukraine or russia in parameter',
+        'Please provide ukraine or russia as parameter',
       );
     }
 
-    const query = this.equipmentRepository
-      .createQueryBuilder()
-      .select()
-      .where('LOWER(country) = LOWER(:country)', { country });
+    const query = this.equipmentRepository.createQueryBuilder().select();
+
+    if (country !== Countries.All) {
+      query.where('LOWER(country) = LOWER(:country)', { country });
+    }
 
     if (types) {
       query.andWhere('type IN (:...types)', { types });

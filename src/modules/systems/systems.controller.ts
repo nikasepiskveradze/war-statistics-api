@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { SystemsService } from './systems.service';
 import { TotalSystemsDto } from './dto/total-systems.dto';
 import { Countries } from '../../enums/countries.enum';
@@ -11,12 +11,12 @@ export class SystemsController {
   constructor(private readonly systemsService: SystemsService) {}
 
   @ApiParam({ name: 'country', enum: Countries })
-  @Get('/systems/:country')
+  @Post('/systems/:country')
   getSystems(@Param('country') country: Countries, @Body() body: SystemsDto) {
     return this.systemsService.systems(country, body);
   }
 
-  @Get('/systems')
+  @Post('/systems')
   getTotalSystems(@Body() body: TotalSystemsDto) {
     return this.systemsService.totalSystems(body);
   }

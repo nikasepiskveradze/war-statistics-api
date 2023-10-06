@@ -13,6 +13,8 @@ async function bootstrap() {
   const server = express();
   const app = await NestFactory.create(AppModule, new ExpressAdapter(server));
 
+  app.enableCors();
+
   const config = new DocumentBuilder()
     .setTitle('War Track API')
     .setDescription(
